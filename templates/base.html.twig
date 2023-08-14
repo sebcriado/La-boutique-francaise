@@ -13,7 +13,7 @@
 
 		<!-- Bootstrap core CSS -->
 		<link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
-
+		<link rel="stylesheet" href="{{ asset('assets/css/boutiquefrancaise.css') }}">
 		<style>
 			.bd-placeholder-img {
 				font-size: 1.125rem;
@@ -36,27 +36,38 @@
 	<body>
 		<header>
 			<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-				<a class="navbar-brand" href="#">La Boutique Française</a>
+				<a class="navbar-brand" href="{{ path('app_home') }}">La Boutique Française</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="collapse navbar-collapse" id="navbarCollapse">
 					<ul class="navbar-nav mr-auto">
 						<li class="nav-item active">
-							<a class="nav-link" href="#">Home
-								<span class="sr-only">(current)</span>
+							<a class="nav-link" href="{{ path('app_product') }}">Nos produits
+							</a>
+						</li>
+						<li class="nav-item active">
+							<a class="nav-link" href="#">Qui sommes-nous ?
+							</a>
+						</li>
+						<li class="nav-item active">
+							<a class="nav-link" href="#">Contact
 							</a>
 						</li>
 					</ul>
-					{% if app.user %}
-						<a href="{{ path('app_account')}}">Mon compte</a>
-						|
-						<a href="{{ path('app_logout')}}">Déconnexion</a>
-					{% else %}
-						<a href="{{ path('app_login')}}">Connexion</a>
-						|
-						<a href="{{ path('app_register')}}">Inscription</a>
-					{% endif %}
+					<div class="navbar-item-custom">
+						{% if app.user %}
+							<a href="{{ path('app_account')}}">Mon compte
+								<small>({{ app.user.firstname }})</small>
+							</a>
+							|
+							<a href="{{ path('app_logout')}}">Déconnexion</a>
+						{% else %}
+							<a href="{{ path('app_login')}}">Connexion</a>
+							|
+							<a href="{{ path('app_register')}}">Inscription</a>
+						{% endif %}
+					</div>
 				</div>
 			</nav>
 		</header>
@@ -120,7 +131,7 @@
 			{% endif %}
 
 			<!-- Marketing messaging and featurettes
-																																																			    ================================================== -->
+																																																																																																						    ================================================== -->
 			<!-- Wrap the rest of the page in another container to center all the content. -->
 
 			<div class="container marketing {% if block('carousel') is not defined %}mt-5{% endif %}"> {% block content %}{% endblock %}
@@ -129,14 +140,16 @@
 				<!-- /.container -->
 
 				<!-- FOOTER -->
-				<footer class="container">
-					<p class="float-right">
-						<a href="#">Back to top</a>
-					</p>
-					<p>&copy; 2017-2020 Company, Inc. &middot;
-						<a href="#">Privacy</a>
-						&middot;
-						<a href="#">Terms</a>
+				<footer class="footer-custom">
+					<p>
+						&copy; 2017-2020 La Boutique Française
+						<br>
+						<small>
+							La Boutique 100% Made in France
+							<br>
+							<a href="#">Privacy</a>
+							<a href="#">Terms</a>
+						</small>
 					</p>
 				</footer>
 			</main>
