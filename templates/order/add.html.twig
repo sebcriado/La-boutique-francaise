@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 
+{% block javascript %}
+	<script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
 {% block title %}Paiement de ma commande - La Boutique Française
 {% endblock %}
 
@@ -66,7 +69,7 @@
 			{{ ((total / 100) + carrier.price) | number_format(2, ',' , '.')}}
 			€
 
-			<a href="" class="btn btn-success btn-block mt-3">Payer |
+			<a href="" class="btn btn-success btn-block mt-3" id="checkout-button">Payer |
 				{{ ((total / 100) + carrier.price) | number_format(2, ',' , '.')}}
 				€</a>
 		</div>

@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use Stripe\Stripe;
 use App\Classe\Cart;
 use App\Entity\Order;
-use App\Entity\OrderDetails;
 use App\Form\OrderType;
+use App\Entity\OrderDetails;
 use Doctrine\ORM\EntityManagerInterface;
+use Stripe\Checkout\Session;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -76,6 +78,9 @@ class OrderController extends AbstractController
 
             $this->entityManager->persist($order);
 
+            $products_for_stripe = [];
+            $YOUR_DOMAIN = 'http://127.0.0.1:8000';
+
             foreach($cart->getFull() as $product){
 
                 $orderDetails = new OrderDetails;
@@ -86,14 +91,41 @@ class OrderController extends AbstractController
                 $orderDetails->setTotal($product['product']->getPrice() * $product['quantity']);
 
                 $this->entityManager->persist($orderDetails);
+
+                $products_for_stripe[] = [
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'unit_amount' => $product['product']->getPrice(),
+                        'product_data' => [
+                            'name' => $product['product']->getName(),
+                            'images' => [$YOUR_DOMAIN."/uploads/".$product['product']->getIllustration()],
+                        ]
+                    ],
+                    'quantity' => $product['quantity'],
+                ];
+
             }
 
-            $this->entityManager->flush();
+
+            //$this->entityManager->flush();
+
+            Stripe::setApiKey('sk_test_51Nk5OcGiW3T43mgMIQl2q3UeBzZMwo5aExrSyBi1CL1YhaEgt0A74j3N18NFrMyR1c8emSVp2fRoX1S84vQVIbrH00qZOln4zh');
+
+
+            $checkout_session = Session::create([
+            'line_items' => [
+                $products_for_stripe
+            ],
+            'mode' => 'payment',
+            'success_url' => $YOUR_DOMAIN . '/success.html',
+            'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
+            ]);
 
             return $this->render('order/add.html.twig', [
                 'cart' => $cart->getFull(),
                 'carrier' => $carriers,
-                'delivery' => $delivery_content
+                'delivery' => $delivery_content,
+                'stripe_checkout_session' => $checkout_session->id
             ]);
         }
 
