@@ -78,8 +78,8 @@ class OrderController extends AbstractController
 
             $this->entityManager->persist($order);
 
-            $products_for_stripe = [];
-            $YOUR_DOMAIN = 'http://127.0.0.1:8000';
+            // $products_for_stripe = [];
+            // $YOUR_DOMAIN = 'http://127.0.0.1:8000';
 
             foreach($cart->getFull() as $product){
 
@@ -107,19 +107,19 @@ class OrderController extends AbstractController
             }
 
 
-            //$this->entityManager->flush();
+            $this->entityManager->flush();
 
-            Stripe::setApiKey('sk_test_51Nk5OcGiW3T43mgMIQl2q3UeBzZMwo5aExrSyBi1CL1YhaEgt0A74j3N18NFrMyR1c8emSVp2fRoX1S84vQVIbrH00qZOln4zh');
+            // Stripe::setApiKey('sk_test_51Nk5OcGiW3T43mgMIQl2q3UeBzZMwo5aExrSyBi1CL1YhaEgt0A74j3N18NFrMyR1c8emSVp2fRoX1S84vQVIbrH00qZOln4zh');
 
 
-            $checkout_session = Session::create([
-            'line_items' => [
-                $products_for_stripe
-            ],
-            'mode' => 'payment',
-            'success_url' => $YOUR_DOMAIN . '/success.html',
-            'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
-            ]);
+            // $checkout_session = Session::create([
+            // 'line_items' => [
+            //     $products_for_stripe
+            // ],
+            // 'mode' => 'payment',
+            // 'success_url' => $YOUR_DOMAIN . '/success.html',
+            // 'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
+            // ]);
 
             return $this->render('order/add.html.twig', [
                 'cart' => $cart->getFull(),
